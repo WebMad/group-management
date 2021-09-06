@@ -20,6 +20,10 @@ window.Vue = require('vue').default;
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('teacher-list', require('./components/TeacherList.vue').default);
+Vue.component('subject-list', require('./components/SubjectList.vue').default);
+Vue.component('schedule', require('./components/Schedule.vue').default);
+Vue.component('schedule-unit', require('./components/schedule/ScheduleUnit.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

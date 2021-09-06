@@ -18,7 +18,7 @@ class CreateTeachersTable extends Migration
             $table->string('name')->comment('Имя');
             $table->string('surname')->comment('Фамилия');
             $table->string('patronymic')->comment('Отчество');
-            $table->string('email')->comment('Электронная почта')->unique();
+            $table->string('email')->nullable()->comment('Электронная почта')->unique();
             $table->string('phone', 11)->comment('Телефон')->nullable()->unique();
             $table->timestamps();
         });

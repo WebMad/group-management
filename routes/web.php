@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\ScheduleController;
+use App\Http\Controllers\SubjectController;
+use App\Http\Controllers\TeacherController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -12,6 +17,12 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::get('/schedule', [ScheduleController::class, 'view'])->name('schedule');
+    Route::get('/teachers', [TeacherController::class, 'view'])->name('teachers');
+    Route::get('/subjects', [SubjectController::class, 'view'])->name('subjects');
+});
 
 Route::get('/', function () {
     return view('welcome');

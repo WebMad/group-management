@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSubjectsTable extends Migration
+class CreateScheduleSchemeTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,10 @@ class CreateSubjectsTable extends Migration
      */
     public function up()
     {
-        Schema::create('subjects', function (Blueprint $table) {
+        Schema::create('schedule_scheme', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->comment('Название предмета');
-            $table
-                ->foreignId('teacher_id')
-                ->nullable()
-                ->comment('ИД преподавателя')
-                ->constrained('teachers');
+            $table->time('start_time')->comment('Время начала пары hh:ss');
+            $table->time('end_time')->comment('Время окончания пары hh:ss');
             $table->timestamps();
         });
     }
@@ -32,6 +28,6 @@ class CreateSubjectsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subjects');
+        Schema::dropIfExists('schedule_scheme');
     }
 }

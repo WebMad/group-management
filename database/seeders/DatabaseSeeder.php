@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ScheduleScheme;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -15,10 +16,29 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        User::firstOrCreate([
+        User::firstOrCreate(['email' => env('APP_ADMIN_EMAIL')], [
             'name' => 'Староста',
             'email' => env('APP_ADMIN_EMAIL'),
             'password' => Hash::make(env('APP_ADMIN_PASS'))
         ]);
+
+        $scheme = [
+            ['9:30', '11:05'],
+            ['11:20', '12:55'],
+            ['13:10', '14:45'],
+            ['15:25', '17:00'],
+            ['17:15', '18:50'],
+        ];
+
+        foreach ($scheme as $unit) {
+            ScheduleScheme::firstOrCreate([
+                'start_time' => $unit[0],
+                'end_time' => $unit[1],
+            ], [
+                'start_time' => $unit[0],
+                'end_time' => $unit[1],
+            ]);
+        }
+
     }
 }

@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Subject extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'name',
+        'teacher_id',
+    ];
+
+    public function teacher()
+    {
+        return $this->hasOne(Teacher::class, 'id', 'teacher_id');
+    }
 }

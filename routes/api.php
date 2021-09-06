@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\API\v1\ScheduleController;
+use App\Http\Controllers\API\v1\SubjectController;
+use App\Http\Controllers\API\v1\TeacherController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +17,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['middleware' => 'auth:sanctum'], function () {
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+    Route::group(['prefix' => 'v1'], function () {
+        Route::apiResource('teacher', TeacherController::class);
+        Route::apiResource('subject', SubjectController::class);
+        Route::apiResource('schedule', ScheduleController::class);
+        Route::get('schedule-scheme', [ScheduleController::class, 'scheme'])->name('schedule-scheme');
+    });
 });

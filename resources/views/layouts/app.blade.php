@@ -21,8 +21,8 @@
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
+        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm row">
+            <div class="col-md-10 m-auto d-flex">
                 <a class="navbar-brand" href="{{ url('/') }}">
                     {{ config('app.name', 'Laravel') }}
                 </a>
@@ -33,7 +33,21 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
-
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('schedule') }}">{{ __('Расписание') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">{{ __('История') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('subjects') }}">{{ __('Предметы') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('teachers') }}">{{ __('Преподаватели') }}</a>
+                        </li>
+{{--                        <li class="nav-item">--}}
+{{--                            <a class="nav-link" href="#">{{ __('') }}</a>--}}
+{{--                        </li>--}}
                     </ul>
 
                     <!-- Right Side Of Navbar -->
