@@ -18,7 +18,7 @@ class UpdateRequest extends FormRequest
             'id' => 'required|exists:schedule',
             'subject_id' => 'required|exists:subjects,id',
             'scheme_id' => 'required|exists:schedule_scheme,id',
-            'week_type' => ['required', Rule::in([1, 2])],
+            'week_type' => ['required', Rule::in([0, 1, 2])],
             'day_of_week' => ['required', Rule::in([0, 1, 2, 3, 4, 5, 6])],
             'start_week' => 'nullable|integer',
             'end_week' => 'nullable|integer',

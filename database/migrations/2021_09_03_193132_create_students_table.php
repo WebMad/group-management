@@ -17,11 +17,11 @@ class CreateStudentsTable extends Migration
             $table->id();
             $table->string('name')->comment('Имя');
             $table->string('surname')->comment('Фамилия');
-            $table->string('patronymic')->comment('Отчество');
-            $table->string('email')->comment('Электронная почта')->unique();
-            $table->string('code')->comment('Код в мтуси, пример: 1БЭИ21012')->nullable()->unique();
-            $table->string('phone', 11)->comment('Телефон')->nullable()->unique();
-            $table->string('vk_id')->comment('ID пользователя в вконтакте')->nullable()->unique();
+            $table->string('patronymic')->nullable()->comment('Отчество');
+            $table->string('email')->nullable()->comment('Электронная почта')->unique();
+            $table->string('code')->nullable()->comment('Код в мтуси, пример: 1БЭИ21012')->nullable()->unique();
+            $table->string('phone', 11)->nullable()->comment('Телефон')->nullable()->unique();
+            $table->string('vk_id')->nullable()->comment('ID пользователя в вконтакте')->nullable()->unique();
             $table->timestamps();
         });
     }

@@ -18,11 +18,21 @@
                 <td>{{ unit.start_time.slice(0, -3) }} - {{ unit.end_time.slice(0, -3) }}</td>
 
                 <td v-for="index in [1, 2, 3, 4, 5, 6, 0]">
-                    <schedule-unit :key="item" v-for="item in [0, 1]"
-                        :unit="getUnitBySchemeIdDayOfWeekWeekType(unit.id, index, item+1)"
+                    <schedule-unit
+                        :unit="getUnitBySchemeIdDayOfWeekWeekType(unit.id, index, 1)
+                        || getUnitBySchemeIdDayOfWeekWeekType(unit.id, index, 0)"
                         :subjects="subjects"
                         :scheme_id="unit.id"
-                        :week_type="item+1"
+                        :day_of_week="index"
+                        @added="getSchedule()"
+                    />
+                    <schedule-unit
+                        v-if="getUnitBySchemeIdDayOfWeekWeekType(unit.id, index, 1)
+                        || getUnitBySchemeIdDayOfWeekWeekType(unit.id, index, 2)
+                        && !getUnitBySchemeIdDayOfWeekWeekType(unit.id, index, 0)"
+                        :unit="getUnitBySchemeIdDayOfWeekWeekType(unit.id, index, 2)"
+                        :subjects="subjects"
+                        :scheme_id="unit.id"
                         :day_of_week="index"
                         @added="getSchedule()"
                     />

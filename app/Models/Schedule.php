@@ -25,4 +25,9 @@ class Schedule extends Model
     {
         return $this->hasOne(Subject::class, 'id', 'subject_id');
     }
+
+    public function scheme()
+    {
+        return $this->hasOne(ScheduleScheme::class, 'id', 'scheme_id');
+    }
 }

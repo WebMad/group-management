@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\ScheduleScheme;
+use App\Models\SystemSetting;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -40,5 +41,19 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
+        $settings = [
+            SystemSetting::START_YEAR_SETTING => '01.09.2021',
+            SystemSetting::COMMUNITY_CHAT_ID_SETTING => '',
+            SystemSetting::VK_TOKEN_SETTING => '',
+        ];
+
+        foreach ($settings as $name => $value) {
+            SystemSetting::firstOrCreate([
+                'name' => $name
+            ], [
+                'name' => $name,
+                'value' => $value
+            ]);
+        }
     }
 }

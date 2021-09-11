@@ -45,9 +45,12 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('teachers') }}">{{ __('Преподаватели') }}</a>
                         </li>
-{{--                        <li class="nav-item">--}}
-{{--                            <a class="nav-link" href="#">{{ __('') }}</a>--}}
-{{--                        </li>--}}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('students') }}">{{ __('Студенты') }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('system-settings') }}">{{ __('Настройки системы') }}</a>
+                        </li>
                     </ul>
 
                     <!-- Right Side Of Navbar -->

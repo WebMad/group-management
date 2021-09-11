@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\v1\ScheduleController;
 use App\Http\Controllers\API\v1\SubjectController;
+use App\Http\Controllers\API\v1\SystemSettingController;
 use App\Http\Controllers\API\v1\TeacherController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -26,6 +27,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::apiResource('teacher', TeacherController::class);
         Route::apiResource('subject', SubjectController::class);
         Route::apiResource('schedule', ScheduleController::class);
+        Route::apiResource('student', \App\Http\Controllers\API\v1\StudentController::class);
+        Route::apiResource('system-settings', SystemSettingController::class);
         Route::get('schedule-scheme', [ScheduleController::class, 'scheme'])->name('schedule-scheme');
     });
 });
