@@ -45,6 +45,7 @@ class DatabaseSeeder extends Seeder
             SystemSetting::START_YEAR_SETTING => '01.09.2021',
             SystemSetting::COMMUNITY_CHAT_ID_SETTING => '',
             SystemSetting::VK_TOKEN_SETTING => '',
+            SystemSetting::VK_CONFIRMATION_STRING_SETTING => '',
         ];
 
         foreach ($settings as $name => $value) {

@@ -17,8 +17,8 @@ class CreateEducationHistoryTable extends Migration
             $table->id();
             $table->foreignId('subject_id')->comment('ИД предмета')->constrained('subjects');
             $table->timestamp('start_date')->comment('Дата начала пары');
-            $table->timestamp('end_date')->comment('Дата окончания пары');
-            $table->foreignId('teacher_id')->comment('ИД преподавателя')->constrained('teachers');
+            $table->timestamp('end_date')->nullable()->comment('Дата окончания пары');
+            $table->foreignId('teacher_id')->nullable()->comment('ИД преподавателя')->constrained('teachers');
             $table->boolean('filled')->default(false)->comment('Заполнены ли посещения');
             $table->timestamps();
         });

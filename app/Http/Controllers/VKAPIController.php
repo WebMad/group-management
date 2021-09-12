@@ -13,9 +13,12 @@ use VK\Client\VKApiClient;
 
 class VKAPIController extends Controller
 {
-    public function route()
+    public function route(Request $request)
     {
-
+        switch ($request->input('type')) {
+            case 'confirmation':
+                return SystemSettingsRepository::getSetting(SystemSetting::VK_CONFIRMATION_STRING_SETTING);
+        }
     }
 
     public function sendMessage()

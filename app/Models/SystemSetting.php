@@ -12,6 +12,7 @@ class SystemSetting extends Model
     const START_YEAR_SETTING = 'start_year';
     const COMMUNITY_CHAT_ID_SETTING = 'community_chat_id';
     const VK_TOKEN_SETTING = 'vk_token';
+    const VK_CONFIRMATION_STRING_SETTING = '';
 
     protected $fillable = ['name', 'value'];
 }
