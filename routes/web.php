@@ -30,7 +30,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/system-settings', [SystemSettingController::class, 'view'])->name('system-settings');
 });
 
-Route::get('/vk-api', [VKAPIController::class, 'route']);
+Route::any('/vk-api', [VKAPIController::class, 'route']);
 Route::get('/vk-api/send', [VKAPIController::class, 'sendSchedule']);
 
 Route::get('/', function () {
