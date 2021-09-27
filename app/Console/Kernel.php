@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\CreateEducationHistory;
 use App\Operations\ScheduleOperation;
 use App\Operations\VKAPIOperation;
 use DateTime;
@@ -28,20 +29,15 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-         $schedule->call(function () {
-             /** @var \App\Models\Schedule[] $schedule */
-             $schedule = ScheduleOperation::generateScheduleByDate(new DateTime());
+         $schedule
+             ->command('schedule:daily-send')
+             ->timezone(new DateTimeZone('+03:00'))
+             ->dailyAt('8:00');
 
-             $message = "Расписание на сегодня:\n\n";
-
-             foreach ($schedule as $unit) {
-                 $start_time = (new DateTime($unit->scheme->start_time))->format('H:i');
-                 $end_time = (new DateTime($unit->scheme->end_time))->format('H:i');
-                 $message .= " - {$start_time}-{$end_time} {$unit->subject->name} \n";
-             }
-
-             VKAPIOperation::sendMessageToCommunityChat($message);
-         })->timezone(new DateTimeZone('+03:00'))->dailyAt('21:45');
+         $schedule
+             ->command('education-history:create')
+             ->dailyAt('06:00')
+             ->timezone('+03:00');
     }
 
     /**
