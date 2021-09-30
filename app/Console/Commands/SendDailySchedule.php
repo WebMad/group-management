@@ -43,15 +43,18 @@ class SendDailySchedule extends Command
         /** @var \App\Models\Schedule[] $schedule */
         $schedule = ScheduleOperation::generateScheduleByDate(new DateTime());
 
-        $message = "Расписание на сегодня:\n\n";
+        if (!empty($schedule)) {
 
-        foreach ($schedule as $unit) {
-            $start_time = (new DateTime($unit->scheme->start_time))->format('H:i');
-            $end_time = (new DateTime($unit->scheme->end_time))->format('H:i');
-            $message .= " - {$start_time}-{$end_time} {$unit->subject->name} {$unit->address}\n";
+            $message = "Расписание на сегодня:\n\n";
+
+            foreach ($schedule as $unit) {
+                $start_time = (new DateTime($unit->scheme->start_time))->format('H:i');
+                $end_time = (new DateTime($unit->scheme->end_time))->format('H:i');
+                $message .= " - {$start_time}-{$end_time} {$unit->subject->name} {$unit->address}\n";
+            }
+
+            VKAPIOperation::sendMessageToCommunityChat($message);
         }
-
-        VKAPIOperation::sendMessageToCommunityChat($message);
         return 0;
     }
 }
