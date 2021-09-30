@@ -2,10 +2,6 @@
 
 namespace App\Console;
 
-use App\Console\Commands\CreateEducationHistory;
-use App\Operations\ScheduleOperation;
-use App\Operations\VKAPIOperation;
-use DateTime;
 use DateTimeZone;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;

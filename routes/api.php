@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\API\v1\EduHistoryController;
 use App\Http\Controllers\API\v1\ScheduleController;
+use App\Http\Controllers\API\v1\StudentController;
 use App\Http\Controllers\API\v1\SubjectController;
 use App\Http\Controllers\API\v1\SystemSettingController;
 use App\Http\Controllers\API\v1\TeacherController;
@@ -27,8 +29,13 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::apiResource('teacher', TeacherController::class);
         Route::apiResource('subject', SubjectController::class);
         Route::apiResource('schedule', ScheduleController::class);
-        Route::apiResource('student', \App\Http\Controllers\API\v1\StudentController::class);
+        Route::apiResource('student', StudentController::class);
         Route::apiResource('system-settings', SystemSettingController::class);
+        Route::group(['prefix' => 'history'], function () {
+            Route::post('show', [EduHistoryController::class, 'show']);
+            Route::post('show-by-date', [EduHistoryController::class, 'showByDate']);
+            Route::post('fill-history', [EduHistoryController::class, 'fillHistory']);
+        });
         Route::get('schedule-scheme', [ScheduleController::class, 'scheme'])->name('schedule-scheme');
     });
 });

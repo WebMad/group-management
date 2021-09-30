@@ -27,6 +27,7 @@ Vue.component('schedule', require('./components/Schedule.vue').default);
 Vue.component('schedule-unit', require('./components/schedule/ScheduleUnit.vue').default);
 Vue.component('system-setting', require('./components/SystemSetting.vue').default);
 Vue.component('system-settings-list', require('./components/SystemSettingsList.vue').default);
+Vue.component('history-list', require('./components/HistoryList.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

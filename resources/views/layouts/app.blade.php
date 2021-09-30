@@ -37,7 +37,7 @@
                             <a class="nav-link" href="{{ route('schedule') }}">{{ __('Расписание') }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">{{ __('История') }}</a>
+                            <a class="nav-link" href="{{ route('history') }}">{{ __('История') }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('subjects') }}">{{ __('Предметы') }}</a>

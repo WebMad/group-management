@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EduHistoryController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectController;
@@ -27,6 +28,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/teachers', [TeacherController::class, 'view'])->name('teachers');
     Route::get('/subjects', [SubjectController::class, 'view'])->name('subjects');
     Route::get('/students', [StudentController::class, 'view'])->name('students');
+    Route::get('/history', [EduHistoryController::class, 'view'])->name('history');
     Route::get('/system-settings', [SystemSettingController::class, 'view'])->name('system-settings');
 });
 
