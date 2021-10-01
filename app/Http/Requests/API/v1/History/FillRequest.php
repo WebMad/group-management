@@ -16,6 +16,7 @@ class FillRequest extends FormRequest
     {
         return [
             'edu_history_id' => 'required|exists:education_history,id',
+            'filled' => 'boolean',
             'students.*.attend' => 'boolean',
             'students.*.valid_reason' => 'boolean',
         ];

@@ -29,6 +29,11 @@
                 </tr>
                 </tbody>
             </table>
+            <div class="form-group">
+                <label>Форма заполнена: </label>
+                <input class="form-control" :checked="history.filled" ref="is_filled" type="checkbox">
+            </div>
+
             <input class="btn btn-primary" type="submit" value="Сохранить">
         </form>
     </div>
@@ -73,6 +78,7 @@ export default {
         fillHistory() {
             let data = new FormData();
             data.append('edu_history_id', this.edu_history_id);
+            data.append('filled', this.$refs.is_filled.checked ? '1' : '0');
             let inputs = this.$refs.fillForm.getElementsByTagName('input');
             for (let i = 0; i < inputs.length; i++) {
                 if (inputs[i].type === 'checkbox') {

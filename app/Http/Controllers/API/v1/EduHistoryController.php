@@ -35,6 +35,11 @@ class EduHistoryController extends Controller
     {
         $students = $request->input()['students'];
         $edu_history_id = $request->input()['edu_history_id'];
+
+        $history = EducationHistory::find($edu_history_id);
+        $history->filled = (bool)$request->input()['filled'];
+        $history->save();
+
         foreach ($students as $student_id => $student) {
             SessionLog::updateOrCreate([
                 'eh_id' => $edu_history_id,
