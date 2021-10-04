@@ -4,6 +4,8 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+import VueTheMask from 'vue-the-mask'
+
 require('./bootstrap');
 
 window.Vue = require('vue').default;
@@ -28,6 +30,9 @@ Vue.component('schedule-unit', require('./components/schedule/ScheduleUnit.vue')
 Vue.component('system-setting', require('./components/SystemSetting.vue').default);
 Vue.component('system-settings-list', require('./components/SystemSettingsList.vue').default);
 Vue.component('history-list', require('./components/HistoryList.vue').default);
+Vue.component('add-edu-history', require('./components/history/AddEduHistory.vue').default);
+
+Vue.use(VueTheMask);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

@@ -33,6 +33,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
         Route::apiResource('system-settings', SystemSettingController::class);
         Route::group(['prefix' => 'history'], function () {
             Route::post('show', [EduHistoryController::class, 'show']);
+            Route::post('create', [EduHistoryController::class, 'create']);
+            Route::post('delete', [EduHistoryController::class, 'delete']);
             Route::post('show-by-date', [EduHistoryController::class, 'showByDate']);
             Route::post('fill-history', [EduHistoryController::class, 'fillHistory']);
         });
