@@ -51,6 +51,7 @@ class CreateEducationHistory extends Command
                 $time_end = explode(':', $unit->scheme->end_time);
                 $edu_history->end_date = (new DateTime())->setTime($time_end[0], $time_end[1], $time_end[2]);
                 $edu_history->teacher_id = $unit->subject->teacher_id;
+                $edu_history->account_hours = $unit->subject->account_hours;
                 $edu_history->save();
             }
         }

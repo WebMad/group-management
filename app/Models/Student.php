@@ -18,4 +18,15 @@ class Student extends Model
         'code',
         'vk_id',
     ];
+
+    public function getFioAttribute()
+    {
+        return "{$this->surname} {$this->name} {$this->patronymic}";
+    }
+
+    public function session_log()
+    {
+        return $this->hasMany(SessionLog::class, 'student_id', 'id')
+            ->with(['education_history']);
+    }
 }

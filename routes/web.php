@@ -34,6 +34,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 Route::any('/vk-api', [VKAPIController::class, 'route'])->name('vk-api');
 Route::get('/vk-api/send', [VKAPIController::class, 'sendSchedule']);
+Route::get('/sheet', [EduHistoryController::class, 'createReport']);
 
 Route::get('/', function () {
     return view('welcome');

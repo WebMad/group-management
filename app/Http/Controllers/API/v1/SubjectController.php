@@ -35,6 +35,7 @@ class SubjectController extends Controller
         Subject::create([
             'name' => $data['name'],
             'teacher_id' => $data['teacher_id'],
+            'account_hours' => $data['account_hours'],
         ]);
     }
 
@@ -62,6 +63,7 @@ class SubjectController extends Controller
         $data = $request->all();
         $subject->name = $data['name'] ?? $subject->name;
         $subject->teacher_id = $data['teacher_id'] ?? $subject->teacher_id;
+        $subject->account_hours = $data['account_hours'] ?? $subject->account_hours;
         $subject->save();
     }
 

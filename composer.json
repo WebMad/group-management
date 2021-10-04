@@ -12,6 +12,7 @@
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.3",
+        "phpoffice/phpspreadsheet": "^1.18",
         "vkcom/vk-php-sdk": "^5.101"
     },
     "require-dev": {

@@ -11,6 +11,7 @@ class Subject extends Model
     protected $fillable = [
         'name',
         'teacher_id',
+        'account_hours',
     ];
 
     public function teacher()

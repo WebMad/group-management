@@ -9,6 +9,7 @@
                 <th scope="col">#</th>
                 <th scope="col">Название</th>
                 <th scope="col">Преподаватель</th>
+                <th scope="col">Учет часов</th>
                 <th scope="col">Действие</th>
             </tr>
             </thead>
@@ -21,6 +22,9 @@
                         <option value="">выберите</option>
                         <option v-for="teacher in teachers" :value="teacher.id">{{ getFioByTeacher(teacher) }}</option>
                     </select>
+                </td>
+                <td>
+                    <input type="checkbox" v-model="add.account_hours">
                 </td>
                 <td class="no-wrap">
                     <button @click="addSubject()" type="button" class="btn btn-primary">
@@ -47,6 +51,13 @@
                         <option value="">выберите</option>
                         <option v-for="teacher in teachers" :value="teacher.id">{{ getFioByTeacher(teacher) }}</option>
                     </select>
+                </td>
+
+                <td v-if="+subject.id !== +edit_id">
+                    {{ subject.account_hours ? 'да' : 'нет' }}
+                </td>
+                <td v-else>
+                    <input type="checkbox" v-model="edit.account_hours">
                 </td>
 
                 <td v-if="+subject.id !== +edit_id">
@@ -83,10 +94,12 @@ export default {
             edit: {
                 name: '',
                 teacher_id: null,
+                account_hours: true,
             },
             add: {
                 name: '',
                 teacher_id: null,
+                account_hours: true,
             },
         }
     },
@@ -128,6 +141,7 @@ export default {
             });
             this.edit.name = subject.name;
             this.edit.teacher_id = subject.teacher_id;
+            this.edit.account_hours = subject.account_hours;
 
             this.edit_id = id;
         },
@@ -137,6 +151,7 @@ export default {
                 id: id,
                 name: this.edit.name,
                 teacher_id: this.edit.teacher_id,
+                account_hours: this.edit.account_hours,
             }).then(response => {
                 this.getSubjects();
             });
@@ -144,17 +159,20 @@ export default {
         cancelEditSubject() {
             this.edit.name = '';
             this.edit.teacher_id = '';
+            this.edit.account_hours = true;
             this.edit_id = null;
         },
         cancelAddSubject() {
             this.add.name = '';
             this.add.teacher_id = '';
+            this.add.account_hours = true;
             this.is_add = false;
         },
         addSubject() {
             axios.post('/api/v1/subject', {
                 name: this.add.name,
                 teacher_id: this.add.teacher_id,
+                account_hours: this.add.account_hours,
             }).then(() => {
                 this.cancelAddSubject()
                 this.is_add = false;

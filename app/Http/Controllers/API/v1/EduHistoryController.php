@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\API\v1\History\AddRequest;
+use App\Http\Requests\API\v1\History\DeleteRequest;
 use App\Http\Requests\API\v1\History\FillRequest;
 use App\Http\Requests\API\v1\History\ShowByDateRequest;
 use App\Http\Requests\API\v1\History\ShowRequest;
 use App\Models\EducationHistory;
+use App\Models\ScheduleScheme;
 use App\Models\SessionLog;
+use App\Models\Subject;
 use DateTime;
-use Illuminate\Http\Request;
 
 class EduHistoryController extends Controller
 {
@@ -18,6 +21,29 @@ class EduHistoryController extends Controller
         $edu_history_id = $request->input('edu_history_id');
         return EducationHistory::where('id', $edu_history_id)
             ->with('subject', 'teacher', 'sessionLog')->first();
+    }
+
+    public function create(AddRequest $request)
+    {
+        $data = $request->input();
+        $subject = Subject::find($data['subject_id']);
+        $scheme = ScheduleScheme::find($data['scheme_id']);
+
+        $start_date = new DateTime($data['date']);
+        $end_date = new DateTime($data['date']);
+
+        $start_time = explode(':', $scheme->start_time);
+        $end_time = explode(':', $scheme->end_time);
+
+        $start_date->setTime($start_time[0], $start_time[1]);
+        $end_date->setTime($end_time[0], $end_time[1]);
+
+        $edu_history = new EducationHistory();
+        $edu_history->subject_id = $data['subject_id'];
+        $edu_history->teacher_id = $subject->teacher_id;
+        $edu_history->start_date = $start_date->format('Y-m-d H:i:s');
+        $edu_history->end_date = $end_date->format('Y-m-d H:i:s');
+        $edu_history->save();
     }
 
     public function showByDate(ShowByDateRequest $request)
@@ -38,6 +64,7 @@ class EduHistoryController extends Controller
 
         $history = EducationHistory::find($edu_history_id);
         $history->filled = (bool)$request->input()['filled'];
+        $history->account_hours = (bool)$request->input()['account_hours'];
         $history->save();
 
         foreach ($students as $student_id => $student) {
@@ -51,5 +78,12 @@ class EduHistoryController extends Controller
                 'valid_reason' => (bool)$student['valid_reason'],
             ]);
         }
+    }
+
+    public function delete(DeleteRequest $request)
+    {
+        $edu_history = EducationHistory::find($request->input('id'));
+        SessionLog::where('eh_id', $request->input('id'))->forceDelete();
+        $edu_history->forceDelete();
     }
 }

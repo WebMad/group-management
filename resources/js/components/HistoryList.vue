@@ -1,5 +1,14 @@
 <template>
     <div class="history-list">
+        <h3>Создать отчет</h3>
+        <form @submit.prevent="createReport">
+            <button type="submit" class="btn btn-primary">сформировать отчет</button>
+        </form>
+
+        <h3>Создание проведенной пары</h3>
+        <add-edu-history/>
+
+        <h3>Заполнение посещаемости</h3>
         <div class="form-group">
             <label>Дата: </label>
             <input @change="getEduHistoryList" v-model="date" class="form-control" type="date">
@@ -8,7 +17,10 @@
             <option value="">выберите</option>
             <option v-for="edu_history in history_list" :value="edu_history.id">{{ edu_history.subject.name }}</option>
         </select>
-        <form ref="fillForm" v-if="history" @submit.prevent="fillHistory">
+        <form ref="fillForm" v-if="history && history_list.length !== 0" @submit.prevent="fillHistory">
+            <button @click="deleteSelected()" type="button" class="btn btn-danger">
+                <i class="bi-trash"></i> Удалить
+            </button>
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -32,6 +44,11 @@
             <div class="form-group">
                 <label>Форма заполнена: </label>
                 <input class="form-control w-25 h-25" :checked="history.filled" ref="is_filled" type="checkbox">
+            </div>
+
+            <div class="form-group">
+                <label>Учитывать часы: </label>
+                <input class="form-control w-25 h-25" :checked="history.account_hours" ref="account_hours" type="checkbox">
             </div>
 
             <input class="btn btn-primary" type="submit" value="Сохранить">
@@ -79,6 +96,7 @@ export default {
             let data = new FormData();
             data.append('edu_history_id', this.edu_history_id);
             data.append('filled', this.$refs.is_filled.checked ? '1' : '0');
+            data.append('account_hours', this.$refs.account_hours.checked ? '1' : '0');
             let inputs = this.$refs.fillForm.getElementsByTagName('input');
             for (let i = 0; i < inputs.length; i++) {
                 if (inputs[i].type === 'checkbox') {
@@ -101,6 +119,20 @@ export default {
                 }
             });
             return res;
+        },
+        deleteSelected()
+        {
+            axios.post('api/v1/history/delete', {
+                id: this.edu_history_id
+            }).then(() => {
+                this.history_list = [];
+                this.date = null;
+                this.history = null;
+            });
+        },
+        createReport()
+        {
+            window.open('/sheet', '_blank');
         }
     }
 }
