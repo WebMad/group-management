@@ -31,7 +31,7 @@
             </table>
             <div class="form-group">
                 <label>Форма заполнена: </label>
-                <input class="form-control" :checked="history.filled" ref="is_filled" type="checkbox">
+                <input class="form-control w-25 h-25" :checked="history.filled" ref="is_filled" type="checkbox">
             </div>
 
             <input class="btn btn-primary" type="submit" value="Сохранить">
