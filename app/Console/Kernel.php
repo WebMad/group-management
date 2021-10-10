@@ -28,11 +28,11 @@ class Kernel extends ConsoleKernel
          $schedule
              ->command('schedule:daily-send')
              ->timezone(new DateTimeZone('+03:00'))
-             ->dailyAt('8:00');
+             ->dailyAt('19:00');
 
          $schedule
              ->command('education-history:create')
-             ->dailyAt('06:00')
+             ->dailyAt('18:00')
              ->timezone('+03:00');
     }
 

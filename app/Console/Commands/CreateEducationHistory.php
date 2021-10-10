@@ -41,20 +41,27 @@ class CreateEducationHistory extends Command
      */
     public function handle()
     {
-        $schedule = ScheduleOperation::generateScheduleByDate(new DateTime());
-        if (!empty($schedule)) {
-            foreach ($schedule as $unit) {
-                $edu_history = new EducationHistory();
-                $edu_history->subject_id = $unit->subject_id;
-                $time_start = explode(':', $unit->scheme->start_time);
-                $edu_history->start_date = (new DateTime())->setTime($time_start[0], $time_start[1], $time_start[2]);
-                $time_end = explode(':', $unit->scheme->end_time);
-                $edu_history->end_date = (new DateTime())->setTime($time_end[0], $time_end[1], $time_end[2]);
-                $edu_history->teacher_id = $unit->subject->teacher_id;
-                $edu_history->account_hours = $unit->subject->account_hours;
-                $edu_history->save();
+        $date = new DateTime();
+        $date->modify('+1 day');
+
+        do {
+            $schedule = ScheduleOperation::generateScheduleByDate($date);
+            if (!empty($schedule)) {
+                foreach ($schedule as $unit) {
+                    $edu_history = new EducationHistory();
+                    $edu_history->subject_id = $unit->subject_id;
+                    $time_start = explode(':', $unit->scheme->start_time);
+                    $edu_history->start_date = $date->setTime($time_start[0], $time_start[1], $time_start[2]);
+                    $time_end = explode(':', $unit->scheme->end_time);
+                    $edu_history->end_date = $date->setTime($time_end[0], $time_end[1], $time_end[2]);
+                    $edu_history->teacher_id = $unit->subject->teacher_id;
+                    $edu_history->account_hours = $unit->subject->account_hours;
+                    $edu_history->save();
+                }
             }
-        }
+            $date->modify('+1 day');
+        } while ($date->format('w') != 1);
+
         return 0;
     }
 }
