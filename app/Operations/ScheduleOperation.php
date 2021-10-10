@@ -28,9 +28,11 @@ class ScheduleOperation
             }
         }
 
-        $schedule = Schedule::where('day_of_week', $date->format('w'))->with(['scheme' => function ($q) {
-            $q->orderBy('start_time');
-        }, 'subject', 'subject.teacher'])->get();
+        $schedule = Schedule::where('day_of_week', $date->format('w'))
+            ->with(['scheme', 'subject', 'subject.teacher'])
+            ->leftJoin('schedule_scheme', 'schedule.scheme_id', '=', 'schedule_scheme.id')
+            ->orderBy('schedule_scheme.start_time')
+            ->get();
 
         $res = [];
 
