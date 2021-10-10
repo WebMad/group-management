@@ -28,14 +28,20 @@ class ScheduleOperation
             }
         }
 
-        $schedule = Schedule::where('day_of_week', $date->format('w'))->with(['scheme' => function ($q) {
-            $q->orderBy('start_time');
-        }, 'subject', 'subject.teacher'])->get();
+        $schedule = Schedule::where('day_of_week', $date->format('w'))
+            ->with(['scheme', 'subject', 'subject.teacher'])
+            ->leftJoin('schedule_scheme', 'schedule.scheme_id', '=', 'schedule_scheme.id')
+            ->orderBy('schedule_scheme.start_time')
+            ->get();
 
         $res = [];
 
         foreach ($schedule as $unit) {
-            if ($week < $unit->start_week || $week > $unit->end_week) {
+            if (
+                !empty($unit->start_week) && empty($unit->end_week) && $week < $unit->start_week
+                || empty($unit->start_week) && !empty($unit->end_week) && $week > $unit->end_week
+                || !empty($unit->start_week) && !empty($unit->end_week) && $week > $unit->end_week && $week < $unit->start_week
+            ) {
                 continue;
             }
             if ($unit->week_type == 0) {

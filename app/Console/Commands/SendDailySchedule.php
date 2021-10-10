@@ -37,15 +37,16 @@ class SendDailySchedule extends Command
      * Execute the console command.
      *
      * @return int
+     * @throws \Exception
      */
     public function handle()
     {
         /** @var \App\Models\Schedule[] $schedule */
-        $schedule = ScheduleOperation::generateScheduleByDate(new DateTime());
+        $schedule = ScheduleOperation::generateScheduleByDate((new DateTime())->modify('+1 day'));
 
         if (!empty($schedule)) {
 
-            $message = "Расписание на сегодня:\n\n";
+            $message = "Расписание на завтра:\n\n";
 
             foreach ($schedule as $unit) {
                 $start_time = (new DateTime($unit->scheme->start_time))->format('H:i');
