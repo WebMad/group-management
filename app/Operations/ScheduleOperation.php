@@ -35,7 +35,11 @@ class ScheduleOperation
         $res = [];
 
         foreach ($schedule as $unit) {
-            if ($week < $unit->start_week || $week > $unit->end_week) {
+            if (
+                !empty($unit->start_week) && empty($unit->end_week) && $week < $unit->start_week
+                || empty($unit->start_week) && !empty($unit->end_week) && $week > $unit->end_week
+                || !empty($unit->start_week) && !empty($unit->end_week) && $week > $unit->end_week && $week < $unit->start_week
+            ) {
                 continue;
             }
             if ($unit->week_type == 0) {
