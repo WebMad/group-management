@@ -17,55 +17,10 @@
             <option value="">выберите</option>
             <option v-for="edu_history in history_list" :value="edu_history.id">{{ edu_history.subject.name }}</option>
         </select>
-        <form ref="fillForm" v-if="history && history_list.length !== 0" @submit.prevent="fillHistory">
-            <button @click="deleteSelected()" type="button" class="btn btn-danger">
-                <i class="bi-trash"></i> Удалить
-            </button>
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">ФИО</th>
-                    <th scope="col">Присутствует</th>
-                    <th scope="col">Уважительная причина</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="student in students">
-                    <td>{{ getFio(student) }}</td>
-                    <td>
-                        <input
-                            :name="`students[${student.id}][attend]`"
-                            :checked="sessionLogByStudentId(student.id).attend"
-                            class="form-control"
-                            type="checkbox"
-                        >
-                    </td>
-                    <td>
-                        <input
-                            :name="`students[${student.id}][valid_reason]`"
-                            :checked="sessionLogByStudentId(student.id).valid_reason"
-                            class="form-control"
-                            type="checkbox"
-                        >
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <div class="form-inline">
-                <div class="form-check">
-                    <label class="form-check-label">Форма заполнена: </label>
-                    <input class="form-check-input ml-1" :checked="history.filled" ref="is_filled" type="checkbox">
-                </div>
-            </div>
-            <div class="form-inline">
-                <div class="form-check">
-                    <label class="form-check-label">Учитывать часы: </label>
-                    <input class="form-check-input ml-1" :checked="history.account_hours" ref="account_hours" type="checkbox">
-                </div>
-            </div>
-
-            <input class="btn btn-primary" type="submit" value="Сохранить">
-        </form>
+        <session-log :key="edu_history_id" v-if="edu_history_id" :eh_id="edu_history_id" />
+        <button v-if="edu_history_id" @click="deleteSelected()" type="button" class="mt-3 btn btn-danger">
+            <i class="bi-trash"></i> Удалить
+        </button>
     </div>
 </template>
 
@@ -85,6 +40,7 @@ export default {
     },
     methods: {
         getEduHistoryList() {
+            this.edu_history_id = null;
             axios.post('api/v1/history/show-by-date', {
                 date: this.date
             }).then(response => {
@@ -101,37 +57,6 @@ export default {
                     this.students = response.data;
                 });
             });
-        },
-        getFio(student) {
-            return `${student.surname} ${student.name} ${student.patronymic}`;
-        },
-        fillHistory() {
-            let data = new FormData();
-            data.append('edu_history_id', this.edu_history_id);
-            data.append('filled', this.$refs.is_filled.checked ? '1' : '0');
-            data.append('account_hours', this.$refs.account_hours.checked ? '1' : '0');
-            let inputs = this.$refs.fillForm.getElementsByTagName('input');
-            for (let i = 0; i < inputs.length; i++) {
-                if (inputs[i].type === 'checkbox') {
-                    data.append(inputs[i].name, inputs[i].checked ? '1' : '0');
-                }
-            }
-
-            axios.post('api/v1/history/fill-history', data);
-        },
-        sessionLogByStudentId(student_id)
-        {
-            let res = {
-                attend: false,
-                valid_reason: false,
-            };
-
-            this.history.session_log.forEach((session_log) => {
-                if (student_id === session_log.student_id) {
-                    res = session_log;
-                }
-            });
-            return res;
         },
         deleteSelected()
         {
@@ -152,8 +77,5 @@ export default {
 </script>
 
 <style scoped>
-input[type="checkbox"] {
-    width: 15px;
-    height: 15px;
-}
+
 </style>
