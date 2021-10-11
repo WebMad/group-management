@@ -32,7 +32,8 @@ class Kernel extends ConsoleKernel
 
          $schedule
              ->command('education-history:create')
-             ->dailyAt('18:00')
+             ->sundays()
+             ->at('18:00')
              ->timezone('+03:00');
     }
 
