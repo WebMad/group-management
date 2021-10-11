@@ -7,6 +7,9 @@ use App\Models\Student;
 use App\Models\SystemSetting;
 use App\Repositories\SystemSettingsRepository;
 use DateTime;
+use Illuminate\Database\Query\Expression;
+use Illuminate\Database\Query\JoinClause;
+use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
@@ -24,11 +27,11 @@ class EduHistoryController extends Controller
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        $students = Student::all();
+        $students = Student::get()->sortBy('surname');
 
         $i = 3;
         foreach ($students as $student) {
-            $sheet->setCellValue("A{$i}", $student->fio);
+            $sheet->setCellValue("A{$i}", "{$student->surname} {$student->name} {$student->patronymic}");
             $sheet->getStyle("A{$i}:C{$i}")
                 ->applyFromArray([
                     'borders' => [
@@ -85,31 +88,11 @@ class EduHistoryController extends Controller
             $sheet->getCellByColumnAndRow($x_offset + 1, $y_offset - 1)
                 ->setValue('по неув. причине');
 
-            foreach ($students as $student) {
-                $week_attend_count = 0;
-                $week_not_attend_count = 0;
-                $week_valid_reason = 0;
-                /** @var EducationHistory[] $edu_histories */
-                $edu_histories = EducationHistory::where('start_date', '<=', $end_date->format('Y-m-d'))->get();
-                foreach ($edu_histories as $edu_history) {
-                    $week_attend_count += $edu_history->sessionLog()
-                        ->where('student_id', $student->id)
-                        ->where('attend', true)
-                        ->count();
-                    $week_not_attend_count += $edu_history->sessionLog()
-                        ->where('student_id', $student->id)
-                        ->where('attend', false)
-                        ->where('valid_reason', false)
-                        ->count();
-                    $week_valid_reason += $edu_history->sessionLog()
-                        ->where('student_id', $student->id)
-                        ->where('attend', false)
-                        ->where('valid_reason', true)
-                        ->count();
-                }
+            $students = $this->getHistory((clone $end_date)->modify('+1 day')->format('Y-m-d'));
 
-                $sheet->getCellByColumnAndRow($x_offset, $y_offset)->setValue($week_valid_reason * 2);
-                $sheet->getCellByColumnAndRow($x_offset + 1, $y_offset)->setValue($week_not_attend_count * 2);
+            foreach ($students as $student) {
+                $sheet->getCellByColumnAndRow($x_offset, $y_offset)->setValue($student->valid * 2);
+                $sheet->getCellByColumnAndRow($x_offset + 1, $y_offset)->setValue($student->not_valid * 2);
 
                 $y_offset++;
             }
@@ -160,5 +143,39 @@ class EduHistoryController extends Controller
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8');
         header('Content-Disposition: attachment; filename="' . urlencode((new DateTime())->format('d.m.Y H:i:s') . '.xlsx') . '"');
         $writer->save('php://output');
+    }
+
+    private function getHistory($to = '') {
+        return DB::table('students as s')
+            ->select([
+                's.name',
+                's.surname',
+                's.patronymic',
+                new Expression('count(sl.id) as not_valid'),
+                new Expression('count(sl2.id) as valid'),
+            ])
+            ->leftJoin('education_history as eh', function (JoinClause $join) use ($to) {
+                $join
+                    ->on('eh.start_date', '<=', new Expression("'{$to}'"))
+                    ->on('eh.filled', '=', new Expression('true'))
+                    ->on('eh.account_hours', '=', new Expression('true'));
+            })
+            ->leftJoin('session_log as sl', function (JoinClause $join) {
+                $join
+                    ->on('eh.id', '=', 'sl.eh_id')
+                    ->on('sl.student_id', '=', 's.id')
+                    ->on('sl.valid_reason', '=', new Expression('false'))
+                    ->on('sl.attend', '=', new Expression('false'));
+            })
+            ->leftJoin('session_log as sl2', function (JoinClause $join) {
+                $join
+                    ->on('eh.id', '=', 'sl2.eh_id')
+                    ->on('sl2.student_id', '=', 's.id')
+                    ->on('sl2.valid_reason', '=', new Expression('true'))
+                    ->on('sl2.attend', '=', new Expression('false'));
+            })
+            ->orderBy('s.surname')
+            ->groupBy('s.name', 's.surname', 's.patronymic')
+            ->get();
     }
 }
