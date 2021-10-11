@@ -33,22 +33,35 @@
                 <tr v-for="student in students">
                     <td>{{ getFio(student) }}</td>
                     <td>
-                        <input :name="`students[${student.id}][attend]`" :checked="sessionLogByStudentId(student.id).attend" class="form-control w-25 h-25" type="checkbox">
+                        <input
+                            :name="`students[${student.id}][attend]`"
+                            :checked="sessionLogByStudentId(student.id).attend"
+                            class="form-control"
+                            type="checkbox"
+                        >
                     </td>
                     <td>
-                        <input :name="`students[${student.id}][valid_reason]`" :checked="sessionLogByStudentId(student.id).valid_reason"  class="form-control w-25 h-25" type="checkbox">
+                        <input
+                            :name="`students[${student.id}][valid_reason]`"
+                            :checked="sessionLogByStudentId(student.id).valid_reason"
+                            class="form-control"
+                            type="checkbox"
+                        >
                     </td>
                 </tr>
                 </tbody>
             </table>
-            <div class="form-group">
-                <label>Форма заполнена: </label>
-                <input class="form-control w-25 h-25" :checked="history.filled" ref="is_filled" type="checkbox">
+            <div class="form-inline">
+                <div class="form-check">
+                    <label class="form-check-label">Форма заполнена: </label>
+                    <input class="form-check-input ml-1" :checked="history.filled" ref="is_filled" type="checkbox">
+                </div>
             </div>
-
-            <div class="form-group">
-                <label>Учитывать часы: </label>
-                <input class="form-control w-25 h-25" :checked="history.account_hours" ref="account_hours" type="checkbox">
+            <div class="form-inline">
+                <div class="form-check">
+                    <label class="form-check-label">Учитывать часы: </label>
+                    <input class="form-check-input ml-1" :checked="history.account_hours" ref="account_hours" type="checkbox">
+                </div>
             </div>
 
             <input class="btn btn-primary" type="submit" value="Сохранить">
@@ -112,7 +125,7 @@ export default {
                 attend: false,
                 valid_reason: false,
             };
-            console.log(this.history);
+
             this.history.session_log.forEach((session_log) => {
                 if (student_id === session_log.student_id) {
                     res = session_log;
@@ -139,5 +152,8 @@ export default {
 </script>
 
 <style scoped>
-
+input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+}
 </style>
