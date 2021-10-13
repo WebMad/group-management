@@ -18,8 +18,8 @@ class UpdateRequest extends FormRequest
             'name' => 'max:255',
             'surname' => 'max:255',
             'patronymic' => 'max:255',
-            'phone' => 'nullable|unique:teachers,phone,' . $this->user()->id . '|max:11',
-            'email' => 'nullable|unique:teachers,email,' . $this->user()->id . '|max:255',
+            'phone' => 'nullable|unique:teachers,phone,' . $this->input('id') . '|max:11',
+            'email' => 'nullable|unique:teachers,email,' . $this->input('id') . '|max:255',
         ];
     }
 }
