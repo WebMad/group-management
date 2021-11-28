@@ -18,10 +18,12 @@ class UpdateRequest extends FormRequest
             'name' => 'max:255',
             'surname' => 'max:255',
             'patronymic' => 'max:255',
-            'phone' => 'unique:students,phone,' . $this->request->all('id') . '|max:11',
-            'email' => 'unique:students,email,' . $this->request->all('id') . '|max:255',
-            'code' => 'unique:students,code,' . $this->user()->id . '|max:255',
-            'vk_id' => 'unique:students,vk_id,' . $this->user()->id . '|max:255',
+            'phone' => 'nullable|unique:students,phone,' . $this->input('id') . '|max:11',
+            'email' => 'nullable|unique:students,email,' . $this->input('id') . '|max:255',
+            'code' => 'nullable|unique:students,code,' . $this->input('id') . '|max:255',
+            'vk_id' => 'nullable|unique:students,vk_id,' . $this->input('id') . '|max:255',
+            'is_expelled' => 'required|boolean',
+            'date_expelled' => 'nullable|required_if:is_expelled,1|date_format:Y-m-d',
         ];
     }
 }

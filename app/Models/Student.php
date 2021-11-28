@@ -17,6 +17,8 @@ class Student extends Model
         'phone',
         'code',
         'vk_id',
+        'is_expelled',
+        'date_expelled',
     ];
 
     public function getFioAttribute()

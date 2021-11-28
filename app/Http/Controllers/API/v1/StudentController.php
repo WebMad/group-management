@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API\v1;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\API\v1\Student\AddRequest;
+use App\Http\Requests\API\v1\Student\UpdateRequest;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
@@ -16,7 +17,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-        return Student::all();
+        return Student::orderBy("surname")->get();
     }
 
     /**
@@ -53,11 +54,11 @@ class StudentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param UpdateRequest $request
+     * @param int $id
+     * @return void
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, $id)
     {
         $student = Student::find($id);
         $data = $request->all();
@@ -68,6 +69,8 @@ class StudentController extends Controller
         $student->phone = $data['phone'] ?? $student->phone;
         $student->code = $data['code'] ?? $student->code;
         $student->vk_id = $data['vk_id'] ?? $student->vk_id;
+        $student->is_expelled = $data['is_expelled'];
+        $student->date_expelled = $data['is_expelled'] ? $data['date_expelled'] : null;
         $student->save();
     }
 

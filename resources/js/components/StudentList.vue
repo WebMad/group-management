@@ -14,6 +14,7 @@
                 <th scope="col">Почта</th>
                 <th scope="col">Телефон</th>
                 <th scope="col">ID ВК</th>
+                <th scope="col">Отчислен</th>
                 <th scope="col">Действия</th>
             </tr>
             </thead>
@@ -27,6 +28,13 @@
                 <td><input type="text" v-model="add.email" class="form-control"></td>
                 <td><input type="text" v-model="add.phone" class="form-control"></td>
                 <td><input type="text" v-model="add.vk_id" class="form-control"></td>
+                <td>
+                    <select v-model="add.is_expelled" id="">
+                        <option value="0" selected>нет</option>
+                        <option value="1">да</option>
+                    </select>
+                    <input v-if="add.is_expelled" type="date" class="form-control" v-model="add.date_expelled">
+                </td>
                 <td class="no-wrap">
                     <button @click="addStudent()" type="button" class="btn btn-primary">
                         <i class="bi-check"></i>
@@ -74,6 +82,15 @@
                     <input type="text" class="form-control" v-model="edit.vk_id">
                 </td>
 
+                <td v-if="+student.id !== +edit_id">{{ student.is_expelled ? "да, " + student.date_expelled.split(" ")[0] : "нет"  }}</td>
+                <td v-else>
+                    <select v-model="edit.is_expelled" id="">
+                        <option :value="false">нет</option>
+                        <option :value="true">да</option>
+                    </select>
+                    <input v-if="['1', true].includes(edit.is_expelled)" type="date" class="form-control" v-model="edit.date_expelled">
+                </td>
+
                 <td v-if="+student.id !== +edit_id">
                     <button @click="editStudent(student.id)" type="button" class="btn btn-primary">
                         <i class="bi-pencil"></i>
@@ -112,6 +129,8 @@ export default {
                 email: '',
                 code: '',
                 vk_id: '',
+                is_expelled: '',
+                date_expelled: '',
             },
             add: {
                 surname: '',
@@ -121,6 +140,8 @@ export default {
                 email: '',
                 code: '',
                 vk_id: '',
+                is_expelled: '',
+                date_expelled: '',
             },
         }
     },
@@ -151,6 +172,8 @@ export default {
             this.edit.email = student.email;
             this.edit.code = student.code;
             this.edit.vk_id = student.vk_id;
+            this.edit.is_expelled = student.is_expelled;
+            this.edit.date_expelled = student.date_expelled?.split(' ')[0];
 
             this.edit_id = id;
         },
@@ -165,6 +188,8 @@ export default {
                 email: this.edit.email,
                 code: this.edit.code,
                 vk_id: this.edit.vk_id,
+                is_expelled: this.edit.is_expelled,
+                date_expelled: ['1', true].includes(this.edit.is_expelled) ? this.edit.date_expelled : null,
             }).then(response => {
                 this.getStudents();
             });
@@ -178,6 +203,8 @@ export default {
             this.edit.code = '';
             this.edit.vk_id = '';
             this.edit_id = null;
+            this.is_expelled = false;
+            this.date_expelled = null;
         },
         cancelAddStudent() {
             this.add.surname = '';
@@ -188,6 +215,8 @@ export default {
             this.add.code = '';
             this.add.vk_id = '';
             this.is_add = false;
+            this.is_expelled = false;
+            this.date_expelled = null;
         },
         addStudent() {
             axios.post('/api/v1/student', {
@@ -198,6 +227,8 @@ export default {
                 email: this.add.email,
                 code: this.add.code,
                 vk_id: this.add.vk_id,
+                is_expelled: this.add.is_expelled,
+                date_expelled: ['1', true].includes(this.edit.is_expelled) ? this.edit.date_expelled : null,
             }).then(() => {
                 this.cancelAddStudent()
                 this.is_add = false;
