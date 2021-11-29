@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import dateFormat, { masks } from "dateformat";
+
 export default {
     name: "HistoryList",
     data() {
@@ -37,6 +39,8 @@ export default {
         }
     },
     mounted() {
+        this.date = dateFormat(new Date(), "yyyy-mm-dd");
+        this.getEduHistoryList();
     },
     methods: {
         getEduHistoryList() {

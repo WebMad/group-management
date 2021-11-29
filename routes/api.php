@@ -37,6 +37,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
             Route::post('delete', [EduHistoryController::class, 'delete']);
             Route::post('show-by-date', [EduHistoryController::class, 'showByDate']);
             Route::post('fill-history', [EduHistoryController::class, 'fillHistory']);
+            Route::post('import-from-prev', [EduHistoryController::class, 'importFromPrevLesson']);
         });
         Route::get('schedule-scheme', [ScheduleController::class, 'scheme'])->name('schedule-scheme');
     });

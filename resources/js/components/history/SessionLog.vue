@@ -1,12 +1,17 @@
 <template>
     <form ref="fillForm" v-if="history" @submit.prevent="fillHistory">
-
         <table class="table table-striped">
             <thead>
             <tr>
                 <th scope="col">ФИО</th>
-                <th scope="col">Присутствует</th>
-                <th scope="col">Уважительная причина</th>
+                <th scope="col">
+                    Присутствует<br>
+                    <input v-model="checkAllAttended" type="checkbox">
+                </th>
+                <th scope="col">
+                    Уважительная причина<br>
+                    <input v-model="checkAllValid" type="checkbox">
+                </th>
             </tr>
             </thead>
             <tbody>
@@ -16,6 +21,7 @@
                     <input
                         :name="`students[${student.id}][attend]`"
                         :checked="sessionLogByStudentId(student.id).attend"
+                        ref="checkbox_attended"
                         class="form-control"
                         type="checkbox"
                     >
@@ -25,6 +31,7 @@
                         :name="`students[${student.id}][valid_reason]`"
                         :checked="sessionLogByStudentId(student.id).valid_reason"
                         class="form-control"
+                        ref="checkbox_valid"
                         type="checkbox"
                     >
                 </td>
@@ -45,6 +52,7 @@
         </div>
 
         <input class="btn btn-primary" type="submit" value="Сохранить">
+        <input type="button" @click="importFromPrevLesson" class="btn btn-secondary" value="Импорт с прошлой пары">
     </form>
 </template>
 
@@ -52,16 +60,43 @@
 export default {
     name: "SessionLog",
     props: ['eh_id'],
+    watch: {
+        checkAllAttended(value) {
+            this.$refs.checkbox_attended.forEach(function (checkbox) {
+                checkbox.checked = value;
+            });
+        },
+        checkAllValid(value) {
+            this.$refs.checkbox_valid.forEach(function (checkbox) {
+                checkbox.checked = value;
+            });
+        }
+    },
     data() {
         return {
             students: [],
+            checkAllAttended: false,
+            checkAllValid: false,
             history: [],
         }
     },
-    mounted() {
+    created() {
         this.getHistoryById();
     },
     methods: {
+        importFromPrevLesson() {
+            axios.post("api/v1/history/import-from-prev", {
+                edu_history_id: this.eh_id,
+            }).then(response => {
+                console.log(response)
+                if (response.data.result) {
+                    this.getHistoryById()
+                    alert("Сохранено");
+                } else {
+                    alert(response.data.msg)
+                }
+            })
+        },
         getHistoryById() {
             axios.post('api/v1/history/show', {
                 edu_history_id: this.eh_id

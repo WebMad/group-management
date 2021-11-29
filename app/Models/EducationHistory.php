@@ -11,6 +11,8 @@ class EducationHistory extends Model
 
     protected $table = 'education_history';
 
+    protected $fillable = ["subject_id", "start_date", "end_date", "teacher_id", "filled", "account_hours"];
+
     public function subject()
     {
         return $this->hasOne(Subject::class, 'id', 'subject_id');
