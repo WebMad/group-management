@@ -35,6 +35,12 @@ class Kernel extends ConsoleKernel
              ->sundays()
              ->at('18:00')
              ->timezone('+03:00');
+
+        $schedule
+            ->command('attendance:send')
+            ->mondays()
+            ->at('9:00')
+            ->timezone('+03:00');
     }
 
     /**
